@@ -1,5 +1,7 @@
 #pragma once
 
+#include <wayland-server-core.h>
+
 #define class     _class
 #define namespace _namespace
 #define static
@@ -29,3 +31,4 @@ extern "C" {
 #undef class
 #undef namespace
 #undef static
+
