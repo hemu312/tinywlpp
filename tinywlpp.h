@@ -35,9 +35,20 @@ extern "C" {
 #include <xkbcommon/xkbcommon.h>
 
 namespace wlr {
-
+    
 }
 
 namespace wl {
+    class display{
+    private:
+        struct wl_display* wl_display;
+    public:
+        display(){
+            this->wl_display = wl_display_create();
+        }
+        ~display(){
+            wl_display_destroy(this->wl_display);
+        }
+    };
     
 }
