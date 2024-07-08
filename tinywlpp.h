@@ -29,4 +29,3 @@ extern "C" {
 #undef class
 #undef namespace
 #undef static
-#endif
