@@ -33,3 +33,11 @@ extern "C" {
 #undef static
 
 #include <xkbcommon/xkbcommon.h>
+
+namespace wlr {
+
+}
+
+namespace wl {
+    
+}
