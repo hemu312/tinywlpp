@@ -32,3 +32,4 @@ extern "C" {
 #undef namespace
 #undef static
 
+#include <xkbcommon/xkbcommon.h>
