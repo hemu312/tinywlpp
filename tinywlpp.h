@@ -2,6 +2,8 @@
 
 #include <wayland-server-core.h>
 #include <cassert>
+#include <unistd.h>
+#include <time.h>
 
 #define class     _class
 #define namespace _namespace
@@ -44,12 +46,7 @@ namespace tinywlpp {
 
     class server {
     private:
-        struct wl_display *wl_display;
-        struct wlr_backend *backend;
-        struct wlr_xdg_shell *xdg_shell;
-        struct wlr_xcursor_manager *cursor_mgr;
-        struct wl_listener cursor_motion;
-                
+              
 
     public:
         struct wl_list toplevels;
@@ -76,7 +73,11 @@ namespace tinywlpp {
         struct wlr_scene_output_layout *scene_layout;
         struct wlr_output_layout *output_layout;
         struct wl_listener new_xdg_surface;
-        
+        struct wl_display *wl_display;
+        struct wlr_backend *backend;
+        struct wlr_xdg_shell *xdg_shell;
+        struct wlr_xcursor_manager *cursor_mgr;
+        struct wl_listener cursor_motion;
 
         server(){
 
