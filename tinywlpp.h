@@ -556,6 +556,21 @@ namespace tinywlpp {
         wlr_seat_set_selection(server->seat, event->source, event->serial);
     }
 
+    void server_cursor_motion(struct wl_listener *listener, void *data) {
+        /* This event is forwarded by the cursor when a pointer emits a _relative_
+        * pointer motion event (i.e. a delta) */
+        server *server = wl_container_of(listener, server, cursor_motion);
+        struct wlr_pointer_motion_event *event = data;
+        /* The cursor doesn't move unless we tell it to. The cursor automatically
+        * handles constraining the motion to the output layout, as well as any
+        * special configuration applied for the specific input device which
+        * generated the event. You can pass NULL for the device if you want to move
+        * the cursor around without any input. */
+        wlr_cursor_move(server->cursor, &event->pointer->base, event->delta_x, event->delta_y);
+        server->process_cursor_motion(event->time_msec);
+    }
+
+
     void server_cursor_motion_absolute(struct wl_listener *listener, void *data) {
         /* This event is forwarded by the cursor when a pointer emits an _absolute_
         * motion event, from 0..1 on each axis. This happens, for example, when
