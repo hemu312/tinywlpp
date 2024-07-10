@@ -570,7 +570,6 @@ namespace tinywlpp {
         server->process_cursor_motion(event->time_msec);
     }
 
-
     void server_cursor_motion_absolute(struct wl_listener *listener, void *data) {
         /* This event is forwarded by the cursor when a pointer emits an _absolute_
         * motion event, from 0..1 on each axis. This happens, for example, when
