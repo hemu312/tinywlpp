@@ -12,7 +12,7 @@ xdg-shell-protocol.h:
 	$(WAYLAND_SCANNER) server-header \
 		$(WAYLAND_PROTOCOLS)/stable/xdg-shell/xdg-shell.xml $@
 
-tinywlpp: tinywlpp.cpp tinywlpp.h xdg-shell-protocol.h
+tinywl: tinywl.c tinywl.h xdg-shell-protocol.h
 	$(CC) $(CFLAGS) \
 		-g -Werror -I. \
 		-DWLR_USE_UNSTABLE \
@@ -20,7 +20,7 @@ tinywlpp: tinywlpp.cpp tinywlpp.h xdg-shell-protocol.h
 		$(LIBS)
 
 clean:
-	rm -f tinywlpp xdg-shell-protocol.h xdg-shell-protocol.c
+	rm -f tinywl xdg-shell-protocol.h xdg-shell-protocol.c
 
-.DEFAULT_GOAL=tinywlpp
+.DEFAULT_GOAL=tinywl
 .PHONY: clean

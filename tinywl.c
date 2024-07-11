@@ -1,6 +1,7 @@
-#include "tinywlpp.h"
-#include <getopt.h>
+#define _POSIX_C_SOURCE 200112L
 #include <stdio.h>
+#include "./tinywl.h"
+
 
 int main(int argc, char *argv[]) {
 	wlr_log_init(WLR_DEBUG, NULL);
@@ -22,7 +23,7 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 
-	tinywlpp::server server;
+	struct tinywl_server server = {0};
 	/* The Wayland display is managed by libwayland. It handles accepting
 	 * clients from the Unix socket, manging Wayland globals, and so on. */
 	server.wl_display = wl_display_create();
@@ -77,7 +78,7 @@ int main(int argc, char *argv[]) {
 	/* Configure a listener to be notified when new outputs are available on the
 	 * backend. */
 	wl_list_init(&server.outputs);
-	server.new_output.notify = tinywlpp::server_new_output;
+	server.new_output.notify = server_new_output;
 	wl_signal_add(&server.backend->events.new_output, &server.new_output);
 
 	/* Create a scene graph. This is a wlroots abstraction that handles all
@@ -95,7 +96,7 @@ int main(int argc, char *argv[]) {
 	 */
 	wl_list_init(&server.toplevels);
 	server.xdg_shell = wlr_xdg_shell_create(server.wl_display, 3);
-	server.new_xdg_surface.notify = tinywlpp::server_new_xdg_surface;
+	server.new_xdg_surface.notify = server_new_xdg_surface;
 	wl_signal_add(&server.xdg_shell->events.new_surface,
 			&server.new_xdg_surface);
 
@@ -122,16 +123,17 @@ int main(int argc, char *argv[]) {
 	 *
 	 * And more comments are sprinkled throughout the notify functions above.
 	 */
-	server.cursor_mode = tinywlpp::CURSOR_PASSTHROUGH;
+	server.cursor_mode = TINYWL_CURSOR_PASSTHROUGH;
 	server.cursor_motion.notify = server_cursor_motion;
 	wl_signal_add(&server.cursor->events.motion, &server.cursor_motion);
-	server.cursor_motion_absolute.notify = tinywlpp::server_cursor_motion_absolute;
-	wl_signal_add(&server.cursor->events.motion_absolute, &server.cursor_motion_absolute);
-	server.cursor_button.notify = tinywlpp::server_cursor_button;
+	server.cursor_motion_absolute.notify = server_cursor_motion_absolute;
+	wl_signal_add(&server.cursor->events.motion_absolute,
+			&server.cursor_motion_absolute);
+	server.cursor_button.notify = server_cursor_button;
 	wl_signal_add(&server.cursor->events.button, &server.cursor_button);
-	server.cursor_axis.notify = tinywlpp::server_cursor_axis;
+	server.cursor_axis.notify = server_cursor_axis;
 	wl_signal_add(&server.cursor->events.axis, &server.cursor_axis);
-	server.cursor_frame.notify = tinywlpp::server_cursor_frame;
+	server.cursor_frame.notify = server_cursor_frame;
 	wl_signal_add(&server.cursor->events.frame, &server.cursor_frame);
 
 	/*
@@ -141,13 +143,13 @@ int main(int argc, char *argv[]) {
 	 * let us know when new input devices are available on the backend.
 	 */
 	wl_list_init(&server.keyboards);
-	server.new_input.notify = tinywlpp::server_new_input;
+	server.new_input.notify = server_new_input;
 	wl_signal_add(&server.backend->events.new_input, &server.new_input);
 	server.seat = wlr_seat_create(server.wl_display, "seat0");
-	server.request_cursor.notify = tinywlpp::seat_request_cursor;
+	server.request_cursor.notify = seat_request_cursor;
 	wl_signal_add(&server.seat->events.request_set_cursor,
 			&server.request_cursor);
-	server.request_set_selection.notify = tinywlpp::seat_request_set_selection;
+	server.request_set_selection.notify = seat_request_set_selection;
 	wl_signal_add(&server.seat->events.request_set_selection,
 			&server.request_set_selection);
 
